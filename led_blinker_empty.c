@@ -8,16 +8,16 @@
 #include <string.h>
 #include <time.h>
 
-#define IN  0
-#define OUT  1
+#define IN 0
+#define OUT 1
 
-#define LOW  0
-#define HIGH  1
+#define LOW 0
+#define HIGH 1
 
 //***************************//
-#define LEDR  24
-#define LEDY  10
-#define LEDG  9
+#define LEDR 24
+#define LEDY 10
+#define LEDG 9
 //***************************//
 #define VALUE_MAX 30
 
@@ -155,11 +155,6 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
-    struct sigaction sa;
-    sa.sa_handler = sigfunc;
-    sa.sa_flags = SA_RESTART;
-    sigaction(SIGINT, &sa, 0);
-
 	if (!quiet)
 		printf("");
 	int argument = 1;
@@ -173,4 +168,27 @@ int main(int argc, char *argv[])
 	GPIODirection(LEDR, OUT);
 	GPIODirection(LEDY, OUT);
 	GPIODirection(LEDG, OUT);
+
+	sleep(0.5);
+	while (1) {
+		GPIOWrite(LEDR, 1);
+		GPIOWrite(LEDY, 0);
+		GPIOWrite(LEDG, 0);
+		printf("Light:R\n");
+		fflush(stdout);
+		usleep(delay);
+		GPIOWrite(LEDR, 0);
+		GPIOWrite(LEDY, 1);
+		GPIOWrite(LEDG, 0);
+		printf("Light:Y\n");
+		fflush(stdout);
+		usleep(delay);
+		GPIOWrite(LEDR, 0);
+		GPIOWrite(LEDY, 0);
+		GPIOWrite(LEDG, 1);
+		printf("Light:G\n");
+		fflush(stdout);
+		usleep(delay);
+	}
+	return 0;
 }
